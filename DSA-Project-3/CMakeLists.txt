@@ -3,7 +3,7 @@
 #
 
 # Add source to this project's executable.
-add_executable (DSA-Project-3 "src/main.cpp")
+add_executable (DSA-Project-3 "src/main.cpp" "src/timer.cpp" "src/timer.h")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET DSA-Project-3 PROPERTY CXX_STANDARD 20)
