@@ -17,7 +17,7 @@ Timer::~Timer()
 	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time);
 
 	if(fn_name.empty())
-		std::cout << duration.count() << "Microseconds" << std::endl;
+		std::cout << "Timed function took: " << duration.count() << " microseconds." << std::endl;
 	else
 		std::cout << "\"" << fn_name << "\"" << " function took: " << duration.count() << " microseconds." << std::endl;
 }

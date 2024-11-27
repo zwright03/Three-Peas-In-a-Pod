@@ -7,8 +7,8 @@ class Timer {
 	std::string fn_name;
 
 public: 
-	Timer();
+	Timer(); // timer starts when object is created
 	Timer(std::string Function_Name);
 
-	~Timer();
+	~Timer(); // timer stops when it falls out of scope or gets deleted
 };
