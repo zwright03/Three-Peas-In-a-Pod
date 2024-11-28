@@ -8,7 +8,7 @@
 
 
 std::vector<DataPoint> loadData() {
-	std::ifstream file("data/2020_taxi_data.csv");
+	std::ifstream file("resources/data/2020_taxi_data.csv");
 
 	// to find out where your binary is built if you cant find it:
 	// put the data folder in the same place as your binary 

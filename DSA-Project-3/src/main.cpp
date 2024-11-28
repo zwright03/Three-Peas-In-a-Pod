@@ -20,7 +20,7 @@ int main() {
 //	window.setFramerateLimit(60);
 //
 //	sf::Font font;
-//	if (!font.loadFromFile("fonts/Roboto-Bold.ttf")) {
+//	if (!font.loadFromFile("resources/fonts/Roboto-Bold.ttf")) {
 //		std::cout << "ERROR MISSING FONT FILE" << std::endl;
 //		return -1;
 //	}

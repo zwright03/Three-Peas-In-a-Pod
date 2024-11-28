@@ -2,7 +2,7 @@
 # and include sub-projects here.
 #
 cmake_minimum_required(VERSION 3.8)
-project(DSA-Project-3 LANGUAGES CXX)
+project(DSA-Project-3)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
@@ -16,7 +16,7 @@ FetchContent_Declare(SFML
     SYSTEM)
 FetchContent_MakeAvailable(SFML)
 
-add_executable (main "DSA-Project-3/src/main.cpp" 
+add_executable (DSA-Project-3 "DSA-Project-3/src/main.cpp" 
                 "DSA-Project-3/src/timer.cpp" 
                 "DSA-Project-3/src/timer.h" 
                 "DSA-Project-3/src/DataPoint.cpp" 
@@ -31,13 +31,19 @@ add_executable (main "DSA-Project-3/src/main.cpp"
                 "DSA-Project-3/src/SortVisualizer.h")
 
 
-target_link_libraries(main PRIVATE sfml-graphics)
-target_compile_features(main PRIVATE cxx_std_17)
+target_link_libraries(DSA-Project-3 PRIVATE sfml-graphics)
+target_compile_features(DSA-Project-3 PRIVATE cxx_std_17)
+
+add_custom_command(TARGET DSA-Project-3 POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    "${CMAKE_SOURCE_DIR}/DSA-Project-3/resources"
+    "$<TARGET_FILE_DIR:DSA-Project-3>/resources"
+)
 
 if(WIN32)
     add_custom_command(
-        TARGET main
+        TARGET DSA-Project-3
         COMMENT "Copy OpenAL DLL"
-        PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${SFML_SOURCE_DIR}/extlibs/bin/$<IF:$<EQUAL:${CMAKE_SIZEOF_VOID_P},8>,x64,x86>/openal32.dll $<TARGET_FILE_DIR:main>
+        PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${SFML_SOURCE_DIR}/extlibs/bin/$<IF:$<EQUAL:${CMAKE_SIZEOF_VOID_P},8>,x64,x86>/openal32.dll $<TARGET_FILE_DIR:DSA-Project-3>
         VERBATIM)
 endif()
