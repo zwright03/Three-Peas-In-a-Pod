@@ -1,8 +1,7 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 
-class SortShape : public sf::RectangleShape
-{
+class SortShape : public sf::RectangleShape {
 	int value;
 
 public:
