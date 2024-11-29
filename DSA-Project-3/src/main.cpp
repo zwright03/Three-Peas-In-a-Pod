@@ -33,6 +33,7 @@ int main() {
 
     auto vis1 = std::make_shared<QuickVisualizer>(&window, &font, true); // right side
     auto vis2 = std::make_shared<MergeVisualizer>(&window, &font, false); // left side
+    auto& shapes = vis2->getShapes();
 
     while (window.isOpen()) {
         sf::Event event;
@@ -45,7 +46,7 @@ int main() {
             vis1->iterate();
 
         if (!vis2->isDone())
-            vis2->iterate();
+            vis2->mergeSort(shapes, 0, shapes.size() - 1);
 
         window.clear(sf::Color::Black);
         vis1->draw();
@@ -53,5 +54,7 @@ int main() {
         window.display();
     }
 
-	return 0;
+    std::cout << vis2->getShapes().size() << std::endl;
+
+    return 0;
 }
