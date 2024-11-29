@@ -1,12 +1,11 @@
 #include "DataPoint.h"
-#include "timer.h"
-
-#include <iostream>
 #include "MergeVisualizer.h"
 #include "QuickVisualizer.h"
+#include "SFML/Graphics.hpp"
 #include "SortShape.h"
 #include "SortVisualizer.h"
-#include "SFML/Graphics.hpp"
+#include "timer.h"
+#include <iostream>
 #include <memory>
 
 int main() {
@@ -33,7 +32,7 @@ int main() {
 
     auto vis1 = std::make_shared<QuickVisualizer>(&window, &font, true); // right side
     auto vis2 = std::make_shared<MergeVisualizer>(&window, &font, false); // left side
-    auto& shapes = vis2->getShapes();
+
 
     while (window.isOpen()) {
         sf::Event event;
@@ -46,7 +45,7 @@ int main() {
             vis1->iterate();
 
         if (!vis2->isDone())
-            vis2->mergeSort(shapes, 0, shapes.size() - 1);
+            vis2->iterate();
 
         window.clear(sf::Color::Black);
         vis1->draw();

@@ -2,9 +2,9 @@
 #include "timer.h"
 #include <fstream>
 #include <iostream>
+#include <sstream>
 #include <stdexcept>
 #include <string>
-#include <sstream>
 
 
 std::vector<DataPoint> loadData() {

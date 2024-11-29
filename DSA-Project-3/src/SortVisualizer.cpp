@@ -28,7 +28,9 @@ yOffset(50), done(false), window(window)
 	if (worst_case)
 		std::reverse(shapes.begin(), shapes.end());
 	else{
-
+		std::random_device rd;
+		std::mt19937 gen(rd());
+		std::shuffle(shapes.begin(), shapes.end(), gen);
 	}
 
 	// initializes the text objects with everything theyll need
