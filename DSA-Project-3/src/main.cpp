@@ -54,7 +54,5 @@ int main() {
         window.display();
     }
 
-    std::cout << vis2->getShapes().size() << std::endl;
-
     return 0;
 }
