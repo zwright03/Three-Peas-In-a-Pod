@@ -21,14 +21,14 @@ add_executable (DSA-Project-3 "DSA-Project-3/src/main.cpp"
                 "DSA-Project-3/src/timer.h" 
                 "DSA-Project-3/src/DataPoint.cpp" 
                 "DSA-Project-3/src/DataPoint.h"
-                "DSA-Project-3/src/BubbleVisualizer.cpp"
-                "DSA-Project-3/src/BubbleVisualizer.h"
-                "DSA-Project-3/src/SelectionVisualizer.cpp"
-                "DSA-Project-3/src/BubbleVisualizer.h"
                 "DSA-Project-3/src/SortShape.cpp"
                 "DSA-Project-3/src/SortShape.h"
                 "DSA-Project-3/src/SortVisualizer.cpp"
-                "DSA-Project-3/src/SortVisualizer.h")
+                "DSA-Project-3/src/SortVisualizer.h"
+                "DSA-Project-3/src/MergeVisualizer.cpp"
+                "DSA-Project-3/src/MergeVisualizer.h"
+                "DSA-Project-3/src/QuickVisualizer.cpp"
+                "DSA-Project-3/src/QuickVisualizer.h")
 
 
 target_link_libraries(DSA-Project-3 PRIVATE sfml-graphics)
