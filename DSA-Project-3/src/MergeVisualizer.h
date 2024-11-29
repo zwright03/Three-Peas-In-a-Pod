@@ -1,6 +1,4 @@
-#ifndef DSA_PROJECT_3_MERGEVISUALIZER_H
-#define DSA_PROJECT_3_MERGEVISUALIZER_H
-
+#pragma once
 #include "SortVisualizer.h"
 #include <vector>
 
@@ -18,5 +16,4 @@ public:
     void iterate() override;
 };
 
-#endif // DSA_PROJECT_3_MERGEVISUALIZER_H
 

@@ -12,4 +12,11 @@ struct DataPoint {
 	DataPoint(bool vendorID, short ratecode, short passenger_count, float trip_distance, float total_amount);
 };
 
+// returns a vector of the data in the data file.
 std::vector<DataPoint> loadData();
+
+// merge sort to be timed and have it's performance measured
+void mergeSort(std::vector<DataPoint>& data, int left, int right);
+
+// quick sort, to be timed and have it's performance measured
+void quickSort(std::vector<DataPoint>& data, int low, int high);
