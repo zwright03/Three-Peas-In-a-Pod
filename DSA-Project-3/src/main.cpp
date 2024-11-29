@@ -16,7 +16,7 @@ int main() {
 	}
 
     sf::RenderWindow window(sf::VideoMode(1200, 800), "Sorting Visualizer");
-    window.setFramerateLimit(60);
+    window.setFramerateLimit(5);
 
     sf::Font font;
     if (!font.loadFromFile("resources/fonts/Roboto-Bold.ttf")) {
