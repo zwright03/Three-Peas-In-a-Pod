@@ -28,11 +28,8 @@ yOffset(50), done(false), window(window)
 	if (worst_case)
 		std::reverse(shapes.begin(), shapes.end());
 	else{
-		std::random_device rd;
-		std::mt19937 gen(rd());
-		std::shuffle(shapes.begin(), shapes.end(), gen);
-	}
 
+	}
 
 	// initializes the text objects with everything theyll need
 	swapsText.setFont(*font);
@@ -46,8 +43,7 @@ yOffset(50), done(false), window(window)
 	comparisonsText.setPosition(sf::Vector2f(xOffset, windowSize.y - 28));
 }
 
-void Visualizer::draw()
-{
+void Visualizer::draw() {
 	auto windowSize = window->getSize();
 
 	for (int i = 0; i < shapes.size(); i++) {
@@ -65,7 +61,6 @@ void Visualizer::draw()
 	window->draw(comparisonsText);
 }
 
-bool Visualizer::isDone()
-{
+bool Visualizer::isDone() {
 	return done;
 }

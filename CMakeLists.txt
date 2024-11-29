@@ -25,8 +25,8 @@ add_executable (DSA-Project-3 "DSA-Project-3/src/main.cpp"
                 "DSA-Project-3/src/SortShape.h"
                 "DSA-Project-3/src/SortVisualizer.cpp"
                 "DSA-Project-3/src/SortVisualizer.h"
-                "DSA-Project-3/src/MergeVisualizer.cpp"
                 "DSA-Project-3/src/MergeVisualizer.h"
+                "DSA-Project-3/src/MergeVisualizer.cpp"
                 "DSA-Project-3/src/QuickVisualizer.cpp"
                 "DSA-Project-3/src/QuickVisualizer.h")
 
