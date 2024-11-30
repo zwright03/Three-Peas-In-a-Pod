@@ -9,13 +9,9 @@
 #include <memory>
 
 int main() {
-	{
-		Timer timer;
-		std::vector<DataPoint> data_points = loadData();
-	}
-
     sf::RenderWindow window(sf::VideoMode(1200, 800), "Sorting Visualizer");
-    window.setFramerateLimit(5);
+    window.setFramerateLimit(60); // there are fields in the classes for the visualuzers to slow them down
+    // set update_frequency in each class higher to slow it down, or lower to speed it up
 
     sf::Font font;
     if (!font.loadFromFile("resources/fonts/Roboto-Bold.ttf")) {
@@ -32,7 +28,6 @@ int main() {
 
     auto vis1 = std::make_shared<QuickVisualizer>(&window, &font, true); // right side
     auto vis2 = std::make_shared<MergeVisualizer>(&window, &font, false); // left side
-
 
     while (window.isOpen()) {
         sf::Event event;

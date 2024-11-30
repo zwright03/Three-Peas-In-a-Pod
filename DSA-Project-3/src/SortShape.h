@@ -9,5 +9,7 @@ public:
 	SortShape(sf::Vector2f size);
 	int getValue() const { return value; }
 	void setValue(int newVal);
+
+	operator int() const;
 };
 

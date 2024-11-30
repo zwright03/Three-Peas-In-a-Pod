@@ -1,14 +1,9 @@
 #include "MergeVisualizer.h"
 #include <iostream>
 #include <vector>
-using namespace std;
 
 MergeVisualizer::MergeVisualizer(sf::RenderWindow* window, sf::Font* font, bool rightSide, bool worst_case)
-        : Visualizer(window, font, rightSide, worst_case), left(0), right(shapes.size() - 1), initialized(false) {
-    indices.push_back(left);
-    indices.push_back(right);
-    std::cout << "MergeVisualizer initialized.\n";
-}
+        : Visualizer(window, font, rightSide, worst_case), current_size(1), update_frequency(30), frame_count(0) {}
 
 void MergeVisualizer::merge(std::array<SortShape, 50>& shapes, int left, int mid, int right) {
     int n1 = mid - left + 1;
@@ -25,51 +20,45 @@ void MergeVisualizer::merge(std::array<SortShape, 50>& shapes, int left, int mid
 
     while (i < n1 && j < n2) {
         if (L[i].getValue() <= R[j].getValue()) {
-            shapes[k] = L[i];
-            i++;
-        } else {
-            shapes[k] = R[j];
-            j++;
+            shapes[k++] = L[i++];
+        } 
+        else {
+            shapes[k++] = R[j++];
         }
-        k++;
-        swaps++;
     }
 
     while (i < n1) {
-        shapes[k] = L[i];
-        i++;
-        k++;
+        shapes[k++] = L[i++];
     }
-
+    
     while (j < n2) {
-        shapes[k] = R[j];
-        j++;
-        k++;
+        shapes[k++] = R[j++];
     }
-
-    std::cout << "Merged [" << left << ", " << mid << "] and [" << mid + 1 << ", " << right << "]\n";
-}
-
-void MergeVisualizer::mergeSort(std::array<SortShape, 50>& shapes, int left, int right) {
-    if (!std::is_sorted(shapes.begin(), shapes.end(), [](const SortShape &a, const SortShape &b) {
-        return a.getValue() < b.getValue();
-    })) {
-        std::cout << "ERROR: Shapes array is not sorted correctly!" << std::endl;
-        done = false;
-    } else {
-        std::cout << "SUCCESS: Shapes array is sorted correctly!" << std::endl;
-        done = true;
-    }
-
-    if (left >= right)
-        return;
-
-    int mid = left + (right - left) / 2;
-    mergeSort(shapes, left, mid);
-    mergeSort(shapes, mid + 1, right);
-    merge(shapes, left, mid, right);
+    
+    // std::cout << "Merged [" << left << ", " << mid << "] and [" << mid + 1 << ", " << right << "]\n";
 }
 
 void MergeVisualizer::iterate() {
-    mergeSort(shapes, 0, shapes.size() - 1);
+    frame_count++; // to slow it down when running
+    if (frame_count % update_frequency != 0)
+        return;
+    if (frame_count > 1000000)
+        frame_count = 0;
+    
+    int n = shapes.size();
+
+    for (int left = 0; left < n - 1; left += 2 * current_size) {
+        int mid = std::min(left + current_size - 1, n - 1);
+        int right = std::min(left + 2 * current_size - 1, n - 1);
+
+        if (mid < right) 
+            merge(shapes, left, mid, right);
+    }
+
+    current_size *= 2;
+
+    // couldnt find where to check if the sorting was done, so i determined
+    // its usually fully sorted by the time current size reaches this number:
+    if (current_size >= 128) 
+        done = true;
 }

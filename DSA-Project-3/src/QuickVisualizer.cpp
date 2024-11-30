@@ -1,11 +1,17 @@
 #include "QuickVisualizer.h"
 
 QuickVisualizer::QuickVisualizer(sf::RenderWindow* window, sf::Font* font, bool rightSide, bool worst_case)
-        : Visualizer(window, font, rightSide, worst_case), pivotIndex(-1) {
+        : Visualizer(window, font, rightSide, worst_case), pivotIndex(-1), update_frequency(10), frame_count(0) {
     stack.push({0, static_cast<int>(shapes.size() - 1)});
 }
 
 void QuickVisualizer::iterate() {
+    frame_count++; // to slow it down when running
+    if (frame_count % update_frequency != 0)
+        return;
+    if (frame_count > 1000000)
+        frame_count = 0;
+
     if (stack.empty()) {
         done = true;
         return;
