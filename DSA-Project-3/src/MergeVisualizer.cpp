@@ -3,7 +3,7 @@
 #include <vector>
 
 MergeVisualizer::MergeVisualizer(sf::RenderWindow* window, sf::Font* font, bool rightSide, bool worst_case)
-        : Visualizer(window, font, rightSide, worst_case), current_size(1), update_frequency(30), frame_count(0) {}
+        : Visualizer(window, font, rightSide, worst_case), current_size(1), update_frequency(100), frame_count(0) {}
 
 void MergeVisualizer::merge(std::array<SortShape, 50>& shapes, int left, int mid, int right) {
     int n1 = mid - left + 1;
@@ -19,10 +19,16 @@ void MergeVisualizer::merge(std::array<SortShape, 50>& shapes, int left, int mid
     int i = 0, j = 0, k = left;
 
     while (i < n1 && j < n2) {
+        L[i].setFillColor(sf::Color::Red);
+        R[j].setFillColor(sf::Color::Red);
+        draw(); // Render the updated shapes
+
         if (L[i].getValue() <= R[j].getValue()) {
+            L[i].setFillColor(sf::Color::White);
             shapes[k++] = L[i++];
         } 
         else {
+            R[j].setFillColor(sf::Color::White);
             shapes[k++] = R[j++];
         }
     }
