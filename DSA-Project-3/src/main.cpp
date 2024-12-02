@@ -375,7 +375,6 @@ Click anywhere to continue.)";
         resultWindow.display();
     }
 
-        return 0;
-    }
-
+    return 0;
 }
+
