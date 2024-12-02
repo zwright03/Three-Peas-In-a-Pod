@@ -22,9 +22,4 @@ public:
 	void draw();
 	bool isDone();
 	virtual void iterate() = 0;
-
-    /*std::array<SortShape, 50>& getShapes() {
-        return shapes;
-    }*/
 };
-

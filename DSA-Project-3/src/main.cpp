@@ -110,8 +110,7 @@ void testSortPerformance(std::vector<DataPoint>& original_data) {
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(1200, 800), "Sorting Visualizer");
-    window.setFramerateLimit(60); // there are fields in the classes for the visualuzers to slow them down
-    // set update_frequency in each class higher to slow it down, or lower to speed it up
+    window.setFramerateLimit(60);
 
     sf::Font font;
     if (!font.loadFromFile("resources/fonts/Roboto-Bold.ttf")) {
@@ -120,7 +119,9 @@ int main() {
     }
 
     { // WELCOME WINDOW
-        std::string welcomeStr = R"(Welcome to the sorting visualizer.
+        window.setTitle("Merge Sort vs. Quick Sort Introduction");
+        std::string welcomeStr = 
+R"(Welcome to the sorting visualizer.
 This will be a comparison between the performance of
 the Merge sort and Quick sort algrotihms.
 
@@ -128,6 +129,7 @@ Make this say something a little more meaningful that shows what
 we are trying to accomplish in this project
 
 Click anywhere to continue.)";
+
         sf::Text welcomeText;
         welcomeText.setFont(font);
         welcomeText.setString(welcomeStr);
@@ -155,9 +157,11 @@ Click anywhere to continue.)";
     }
 
     { // SORT VISUALIZATION WINDOW
+        window.setTitle("Merge Sort vs. Quick Sort Visualization");
+
         sf::Text titleText;
         titleText.setFont(font);
-        titleText.setString("Merge Sort vs. Quick Sort, Visualization:");
+        titleText.setString("Merge Sort vs. Quick Sort Visualization:");
         titleText.setCharacterSize(35);
         titleText.setFillColor(sf::Color::White);
         titleText.setOrigin(titleText.getLocalBounds().width / 2, titleText.getLocalBounds().height / 2);
