@@ -31,14 +31,17 @@ void MergeVisualizer::merge(std::array<SortShape, 50>& shapes, int left, int mid
             R[j].setFillColor(sf::Color::White);
             shapes[k++] = R[j++];
         }
+        comparisons++;
     }
 
     while (i < n1) {
         shapes[k++] = L[i++];
+        swaps++;
     }
     
     while (j < n2) {
         shapes[k++] = R[j++];
+        swaps++;
     }
     
     // std::cout << "Merged [" << left << ", " << mid << "] and [" << mid + 1 << ", " << right << "]\n";
