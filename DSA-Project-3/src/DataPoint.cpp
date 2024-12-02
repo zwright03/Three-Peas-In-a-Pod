@@ -56,7 +56,10 @@ std::vector<DataPoint> loadData() {
 	}
 
 	file.close();
-	return data_points;
+
+    std::cout << data_points.size() << " entries were loaded from the CSV file" << std::endl;
+
+    return data_points;
 }
 
 DataPoint::DataPoint(bool vendorID, short ratecode, short passenger_count, float trip_distance, float total_amount)
@@ -126,19 +129,30 @@ void mergeSort(std::vector<DataPoint>& data, int left, int right)
 
 static int partition(std::vector<DataPoint>& data, int low, int high)
 {
-	DataPoint pivot = data[high];
-	int i = low - 1;
+    int mid = low + (high - low) / 2;
 
-	for (int j = low; j < high; j++) {
-		if (data[j].total_amount <= pivot.total_amount) {
-			i++;
-			std::swap(data[i], data[j]);
-		}
-	}
+    if (data[low].total_amount > data[mid].total_amount)
+        std::swap(data[low], data[mid]);
+    if (data[low].total_amount > data[high].total_amount)
+        std::swap(data[low], data[high]);
+    if (data[mid].total_amount > data[high].total_amount)
+        std::swap(data[mid], data[high]);
 
-	std::swap(data[i + 1], data[high]);
+    std::swap(data[mid], data[high]);
 
-	return (i + 1);
+    DataPoint pivot = data[high];
+    int i = low - 1;
+
+    for (int j = low; j < high; j++) {
+        if (data[j].total_amount <= pivot.total_amount) {
+            i++;
+            std::swap(data[i], data[j]);
+        }
+    }
+
+    std::swap(data[i + 1], data[high]);
+
+    return (i + 1);
 }
 
 void quickSort(std::vector<DataPoint>& data, int low, int high)
@@ -150,4 +164,4 @@ void quickSort(std::vector<DataPoint>& data, int low, int high)
 		quickSort(data, partition_idx + 1, high);
 	}
 }
-
+// go back to this

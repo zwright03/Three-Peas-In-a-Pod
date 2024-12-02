@@ -8,50 +8,104 @@
 #include <iostream>
 #include <memory>
 #include <algorithm>
+#include <cstddef>
+#include <cstdlib>
+
+size_t current_memory_usage = 0;
+size_t peak_memory_usage = 0;
+double time_merge_original, time_quick_original, time_merge_sorted, time_quick_sorted, time_merge_reverse, time_quick_reverse;
+size_t memory_merge_original, memory_quick_original, memory_merge_sorted, memory_quick_sorted, memory_merge_reverse, memory_quick_reverse;
+
+void* operator new(size_t size) {
+    current_memory_usage += size;
+    if (current_memory_usage > peak_memory_usage)
+        peak_memory_usage = current_memory_usage;
+    return malloc(size);
+}
+
+void operator delete(void* ptr, size_t size) noexcept {
+    current_memory_usage -= size;
+    free(ptr);
+}
+
+void operator delete(void* ptr) noexcept {
+    free(ptr);
+}
 
 void testSortPerformance(std::vector<DataPoint>& original_data) {
     std::vector<DataPoint> data;
 
-    // Original unsorted
-    data = original_data;
-    int time_merge_original = timeSortFunction(mergeSort, data);
-    data = original_data;
-    int time_quick_original = timeSortFunction(quickSort, data);
+    std::cout << "\nInitial Memory Usage: " << current_memory_usage << " bytes\n";
 
-    /*
+    data = original_data;
+    current_memory_usage = 0;
+    peak_memory_usage = 0;
+    Timer timer;
+    timer.start();
+    mergeSort(data, 0, data.size() - 1);
+    int time_merge_original = timer.stop();
+    std::cout << "\nOriginal sorted dataset testing:" << std::endl;
+    std::cout << "Merge Sort: Time = " << time_merge_original / 1e6 << " seconds, " << "Memory = " << peak_memory_usage << " bytes\n";
+    size_t memory_merge_original = peak_memory_usage;
 
-    // Sorted
+    data = original_data;
+    current_memory_usage = 0;
+    peak_memory_usage = 0;
+    timer.start();
+    quickSort(data, 0, data.size() - 1);
+    int time_quick_original = timer.stop();
+    std::cout << "Quick Sort: Time = " << time_quick_original / 1e6 << " seconds, " << "Memory = " << peak_memory_usage << " bytes\n";
+    size_t memory_quick_original = peak_memory_usage;
+
     data = original_data;
     std::sort(data.begin(), data.end(), [](const DataPoint& a, const DataPoint& b) {
         return a.total_amount < b.total_amount;
     });
-    int time_merge_sorted = timeSortFunction(mergeSort, data);
+    current_memory_usage = 0;
+    peak_memory_usage = 0;
+    timer.start();
+    mergeSort(data, 0, data.size() - 1);
+    int time_merge_sorted = timer.stop();
+    std::cout << "\nAlready sorted dataset testing:" << std::endl;
+    std::cout << "Merge Sort: Time = " << time_merge_sorted / 1e6 << " seconds, " << "Memory = " << peak_memory_usage << " bytes\n";
+    size_t memory_merge_sorted = peak_memory_usage;
+
     data = original_data;
     std::sort(data.begin(), data.end(), [](const DataPoint& a, const DataPoint& b) {
         return a.total_amount < b.total_amount;
     });
-    int time_quick_sorted = timeSortFunction(quickSort, data);
+    current_memory_usage = 0;
+    peak_memory_usage = 0;
+    timer.start();
+    quickSort(data, 0, data.size() - 1);
+    int time_quick_sorted = timer.stop();
+    std::cout << "Quick Sort: Time = " << time_quick_sorted / 1e6 << " seconds, " << "Memory = " << peak_memory_usage << " bytes\n";
+    size_t memory_quick_sorted = peak_memory_usage;
 
-    // Reverse sorted
     data = original_data;
     std::sort(data.begin(), data.end(), [](const DataPoint& a, const DataPoint& b) {
         return a.total_amount > b.total_amount;
     });
-    int time_merge_reverse = timeSortFunction(mergeSort, data);
+    current_memory_usage = 0;
+    peak_memory_usage = 0;
+    timer.start();
+    mergeSort(data, 0, data.size() - 1);
+    int time_merge_reverse = timer.stop();
+    std::cout << "\nReverse sorted dataset testing:" << std::endl;
+    std::cout << "Merge Sort: Time = " << time_merge_reverse / 1e6 << " seconds, " << "Memory = " << peak_memory_usage << " bytes\n";
+    size_t memory_merge_reverse = peak_memory_usage;
+
     data = original_data;
     std::sort(data.begin(), data.end(), [](const DataPoint& a, const DataPoint& b) {
         return a.total_amount > b.total_amount;
     });
-    int time_quick_reverse = timeSortFunction(quickSort, data);
-
-    */
-
-    std::cout << "Performance Results (in microseconds):\n";
-    std::cout << "Scenario          MergeSort       QuickSort\n";
-    std::cout << "-------------------------------------------\n";
-    std::cout << "Original          " << time_merge_original << "            " << time_quick_original << "\n";
-    //std::cout << "Sorted            " << time_merge_sorted << "            " << time_quick_sorted << "\n";
-    //std::cout << "Reverse Sorted    " << time_merge_reverse << "            " << time_quick_reverse << "\n";
+    current_memory_usage = 0;
+    peak_memory_usage = 0;
+    timer.start();
+    quickSort(data, 0, data.size() - 1);
+    int time_quick_reverse = timer.stop();
+    std::cout << "Quick Sort: Time = " << time_quick_reverse / 1e6 << " seconds, " << "Memory = " << peak_memory_usage << " bytes\n";
+    size_t memory_quick_reverse = peak_memory_usage;
 }
 
 int main() {
@@ -101,5 +155,6 @@ int main() {
         std::cerr << "Error: " << e.what() << std::endl;
     }
 
+    // enter SFML here
     return 0;
 }
