@@ -17,14 +17,19 @@ void QuickVisualizer::iterate() {
         return;
     }
 
-    auto [low, high] = stack.top();
+    for(int i = 0; i < 50; i++){
+        shapes[i].setFillColor(sf::Color::White);
+    }
 
+
+    auto [low, high] = stack.top();
     if (low < high) {
         if (pivotIndex == -1) {
             pivotIndex = low;
+            shapes[low].setFillColor(sf::Color::Red);
+            shapes[high].setFillColor(sf::Color::Red);
             int pivotValue = shapes[pivotIndex].getValue();
             int i = low + 1, j = high;
-
             while (i <= j) {
                 if (shapes[i].getValue() <= pivotValue) {
                     i++;
