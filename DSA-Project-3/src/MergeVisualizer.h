@@ -2,12 +2,10 @@
 #include "SortVisualizer.h"
 #include <vector>
 
-// TODO: Place swaps and comparisons counters properly.
 class MergeVisualizer : public Visualizer {
 private:
     int current_size;
     int frame_count, update_frequency;
-
     void merge(std::array<SortShape, 50>& shapes, int left, int mid, int right);
 
 public:

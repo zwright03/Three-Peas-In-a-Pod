@@ -6,7 +6,6 @@ class QuickVisualizer : public Visualizer {
 private:
     std::stack<std::pair<int, int>> stack;
     int pivotIndex;
-
     int frame_count, update_frequency;
 
 public:

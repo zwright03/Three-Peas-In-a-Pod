@@ -6,7 +6,7 @@
 #include <stdexcept>
 #include <string>
 
-
+// Retain the data from the large CSV file
 std::vector<DataPoint> loadData() {
 	std::ifstream file("resources/data/2020_taxi_data.csv");
 
@@ -14,10 +14,10 @@ std::vector<DataPoint> loadData() {
 		throw std::runtime_error("Missing taxi information");
 
 	std::string line;
-	getline(file, line); // get the first line, which is just the column titles.
+	getline(file, line); // Get the first line, which is just the column titles
 
 	std::vector<DataPoint> data_points;
-	data_points.reserve(125000);
+	data_points.reserve(125000); // Reserves 125,000 entry spaces
 
 	while (getline(file, line)) {
 		std::stringstream ss(line);
@@ -67,22 +67,23 @@ DataPoint::DataPoint(bool vendorID, short ratecode, short passenger_count, float
 	trip_distance(trip_distance), total_amount(total_amount) {}
 
 
+// Merge sort algorithm
 static void merge(std::vector<DataPoint>& data, int left, int mid, int right)
 {
 	int i, j, k;
 	int n1 = mid - left + 1;
 	int n2 = right - mid;
 
-	// temp vectors
+	// Temporary vectors
 	std::vector<DataPoint> L(n1), R(n2);
 
-	// copy data into temp vectors
+	// Copy data into temporary vectors
 	for (i = 0; i < n1; i++)
 		L[i] = data[left + i];
 	for (j = 0; j < n2; j++)
 		R[j] = data[mid + 1 + j];
 
-	// merge them back into data vector
+	// Merge them back into data vector
 	i = 0;
 	j = 0;
 	k = left;
@@ -98,14 +99,14 @@ static void merge(std::vector<DataPoint>& data, int left, int mid, int right)
 		k++;
 	}
 
-	// copy the remaining things in L
+	// Copy the remaining things in L
 	while (i < n1) {
 		data[k] = L[i];
 		i++;
 		k++;
 	}
 
-	// copy the remaining things in R
+	// Copy the remaining things in R
 	while (j < n2) {
 		data[k] = R[j];
 		j++;
@@ -118,15 +119,16 @@ void mergeSort(std::vector<DataPoint>& data, int left, int right)
 	if (left < right) {
 		int mid = left + (right - left) / 2;
 
-		// sort both halves
+		// Sort both halves
 		mergeSort(data, left, mid);
 		mergeSort(data, mid + 1, right);
 
-		// merge the halves
+		// Merge the halves
 		merge(data, left, mid, right);
 	}
 }
 
+// Quick sort algorithm
 static int partition(std::vector<DataPoint>& data, int low, int high)
 {
     int mid = low + (high - low) / 2;

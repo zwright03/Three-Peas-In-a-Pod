@@ -11,11 +11,13 @@
 #include <cstddef>
 #include <cstdlib>
 
+// Variables used for comparing performance
 size_t current_memory_usage = 0;
 size_t peak_memory_usage = 0;
 double time_merge_original, time_quick_original, time_merge_sorted, time_quick_sorted, time_merge_reverse, time_quick_reverse;
 size_t memory_merge_original, memory_quick_original, memory_merge_sorted, memory_quick_sorted, memory_merge_reverse, memory_quick_reverse;
 
+// Methods used to test the max memory used by the sorting algorithms
 void* operator new(size_t size) {
     current_memory_usage += size;
     if (current_memory_usage > peak_memory_usage)
@@ -32,6 +34,7 @@ void operator delete(void* ptr) noexcept {
     free(ptr);
 }
 
+// Tests all the different scenarios, calculating time and memory usage
 void testSortPerformance(std::vector<DataPoint>& original_data) {
     std::vector<DataPoint> data;
 
@@ -108,6 +111,7 @@ void testSortPerformance(std::vector<DataPoint>& original_data) {
     memory_quick_reverse = peak_memory_usage;
 }
 
+// Main function that calls the performance method and all of the SFML windows
 int main() {
     sf::RenderWindow window(sf::VideoMode(1200, 800), "Sorting Visualizer");
     window.setFramerateLimit(60);
@@ -118,7 +122,7 @@ int main() {
         return -1;
     }
 
-    { // WELCOME WINDOW
+    { // Welcome and introduction window
         window.setTitle("Merge Sort vs. Quick Sort Introduction");
         std::string welcomeStr = 
 R"(Welcome to the sorting visualizer.
@@ -161,14 +165,12 @@ Click anywhere to continue.)";
             }
 
             window.clear(sf::Color::Black);
-
             window.draw(welcomeText);
-
             window.display();
         }
     }
 
-    { // SORT VISUALIZATION WINDOW
+    { // Sorting visualization window
         window.setTitle("Merge Sort vs. Quick Sort Visualization");
 
         sf::Text titleText;
@@ -187,8 +189,8 @@ Click anywhere to continue.)";
         nextText.setOrigin(nextText.getLocalBounds().width / 2, nextText.getLocalBounds().height / 2);
         nextText.setPosition(window.getSize().x / 2, window.getSize().y / 2);
 
-        auto vis1 = std::make_shared<QuickVisualizer>(&window, &font, true); // right side
-        auto vis2 = std::make_shared<MergeVisualizer>(&window, &font, false); // left side
+        auto vis1 = std::make_shared<QuickVisualizer>(&window, &font, true); // Right side
+        auto vis2 = std::make_shared<MergeVisualizer>(&window, &font, false); // Left side
 
         bool move_to_results = false;
         while (window.isOpen() && !move_to_results) {
@@ -222,14 +224,16 @@ Click anywhere to continue.)";
             window.display();
         }
     }
-        try {
-            std::vector<DataPoint> data = loadData();
-            testSortPerformance(data);
-        } catch (const std::exception& e) {
-            std::cerr << "Error: " << e.what() << std::endl;
-        }
 
-    // Comparison window
+    // Calculate the values of the performance on the large database
+    try {
+        std::vector<DataPoint> data = loadData();
+        testSortPerformance(data);
+    } catch (const std::exception& e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+    }
+
+    // Large database comparison results window
     sf::RenderWindow resultWindow(sf::VideoMode(1200, 800), "Sorting Comparisons");
 
     sf::Text text1("Original unsorted", font, 30);
@@ -392,7 +396,6 @@ Click anywhere to continue.)";
 
         resultWindow.display();
     }
-
     return 0;
 }
 

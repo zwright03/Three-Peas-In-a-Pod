@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 
+// This will visualize the process of the merge sort (left side of screen)
 MergeVisualizer::MergeVisualizer(sf::RenderWindow* window, sf::Font* font, bool rightSide, bool worst_case)
         : Visualizer(window, font, rightSide, worst_case), current_size(1), update_frequency(100), frame_count(0) {}
 
@@ -43,12 +44,10 @@ void MergeVisualizer::merge(std::array<SortShape, 50>& shapes, int left, int mid
         shapes[k++] = R[j++];
         swaps++;
     }
-    
-    // std::cout << "Merged [" << left << ", " << mid << "] and [" << mid + 1 << ", " << right << "]\n";
 }
 
 void MergeVisualizer::iterate() {
-    frame_count++; // to slow it down when running
+    frame_count++; // To slow it down when running so process is easier to see
     if (frame_count % update_frequency != 0)
         return;
     if (frame_count > 1000000)
@@ -66,11 +65,9 @@ void MergeVisualizer::iterate() {
 
     current_size *= 2;
 
-    // couldnt find where to check if the sorting was done, so i determined
-    // its usually fully sorted by the time current size reaches this number:
     if (current_size >= 128) {
         done = true;
-        for (auto& shape : shapes) // at the end some were being left red, so i added this
+        for (auto& shape : shapes) // Eliminates any red at the end
             shape.setFillColor(sf::Color::White);
     }
 }

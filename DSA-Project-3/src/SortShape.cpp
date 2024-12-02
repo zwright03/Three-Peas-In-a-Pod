@@ -6,7 +6,6 @@ void SortShape::setValue(int newVal) {
 	this->value = newVal;
 }
 
-SortShape::operator int() const
-{
+SortShape::operator int() const {
 	return this->value;
 }
