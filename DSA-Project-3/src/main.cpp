@@ -123,10 +123,22 @@ int main() {
         std::string welcomeStr = 
 R"(Welcome to the sorting visualizer.
 This will be a comparison between the performance of
-the Merge sort and Quick sort algrotihms.
+the Merge sort and Quick sort algorithms.
 
-Make this say something a little more meaningful that shows what
-we are trying to accomplish in this project
+We will start with a visualization of Merge sort and Quick sort
+simultaneously, showing where swaps are made in red. Then, we
+will calculate the time and memory usage of each sorting algorithm
+on a large database of 125,000 entries. Finally, we will display
+these results using bar graphs for three different scenarios:
+One where the data is randomly unsorted, one where it is already
+sorted, and one where it is sorted in reverse.
+
+One problem we are solving with our project is some systems using
+a specific sorting algorithm without understanding its strengths
+and shortcomings. This causes inefficiencies, especially when the
+databases are extremely large, containing over 100,000 entries.
+With our analysis we will determine the optimal algorithm based on
+the system's foundation and needs.
 
 Click anywhere to continue.)";
 
@@ -171,7 +183,7 @@ Click anywhere to continue.)";
         nextText.setFont(font);
         nextText.setString("Click anywhere to continue.");
         nextText.setCharacterSize(25);
-        nextText.setFillColor(sf::Color::Red);
+        nextText.setFillColor(sf::Color::Blue);
         nextText.setOrigin(nextText.getLocalBounds().width / 2, nextText.getLocalBounds().height / 2);
         nextText.setPosition(window.getSize().x / 2, window.getSize().y / 2);
 
@@ -187,8 +199,10 @@ Click anywhere to continue.)";
             while (window.pollEvent(event)) {
                 if (event.type == sf::Event::Closed)
                     window.close();
-                if (event.type == sf::Event::MouseButtonPressed && vis1Done && vis2Done)
+                if (event.type == sf::Event::MouseButtonPressed && vis1Done && vis2Done) {
                     move_to_results = true;
+                    window.close();
+                }
             }
 
             if (!vis1Done)
