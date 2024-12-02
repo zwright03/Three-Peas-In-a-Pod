@@ -119,41 +119,97 @@ int main() {
         return -1;
     }
 
-    sf::Text testText;
-    testText.setFont(font);
-    testText.setString("Test");
-    testText.setCharacterSize(50);
-    testText.setFillColor(sf::Color::Black);
-    testText.setPosition(500, 350);
+    { // WELCOME WINDOW
+        std::string welcomeStr = R"(Welcome to the sorting visualizer.
+This will be a comparison between the performance of
+the Merge sort and Quick sort algrotihms.
 
-    auto vis1 = std::make_shared<QuickVisualizer>(&window, &font, true); // right side
-    auto vis2 = std::make_shared<MergeVisualizer>(&window, &font, false); // left side
+Make this say something a little more meaningful that shows what
+we are trying to accomplish in this project
 
-    while (window.isOpen()) {
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
-                window.close();
+Click anywhere to continue.)";
+        sf::Text welcomeText;
+        welcomeText.setFont(font);
+        welcomeText.setString(welcomeStr);
+        welcomeText.setCharacterSize(25);
+        welcomeText.setFillColor(sf::Color::White);
+        welcomeText.setOrigin(welcomeText.getLocalBounds().width / 2, welcomeText.getLocalBounds().height / 2);
+        welcomeText.setPosition(window.getSize().x / 2, window.getSize().y / 2);
+
+        bool move_to_visualization = false;
+        while (window.isOpen() && !move_to_visualization) {
+            sf::Event event;
+            while (window.pollEvent(event)) {
+                if (event.type == sf::Event::Closed)
+                    window.close();
+                if (event.type == sf::Event::MouseButtonPressed)
+                    move_to_visualization = true;
+            }
+
+            window.clear(sf::Color::Black);
+
+            window.draw(welcomeText);
+
+            window.display();
         }
-
-        if (!vis1->isDone())
-            vis1->iterate();
-
-        if (!vis2->isDone())
-            vis2->iterate();
-
-        window.clear(sf::Color::Black);
-        vis1->draw();
-        vis2->draw();
-        window.display();
     }
 
-    try {
-        std::vector<DataPoint> data = loadData();
-        testSortPerformance(data);
-    } catch (const std::exception& e) {
-        std::cerr << "Error: " << e.what() << std::endl;
+    { // SORT VISUALIZATION WINDOW
+        sf::Text titleText;
+        titleText.setFont(font);
+        titleText.setString("Merge Sort vs. Quick Sort, Visualization:");
+        titleText.setCharacterSize(35);
+        titleText.setFillColor(sf::Color::White);
+        titleText.setOrigin(titleText.getLocalBounds().width / 2, titleText.getLocalBounds().height / 2);
+        titleText.setPosition(window.getSize().x / 2, titleText.getLocalBounds().height / 2);
+
+        sf::Text nextText;
+        nextText.setFont(font);
+        nextText.setString("Click anywhere to continue.");
+        nextText.setCharacterSize(25);
+        nextText.setFillColor(sf::Color::Red);
+        nextText.setOrigin(nextText.getLocalBounds().width / 2, nextText.getLocalBounds().height / 2);
+        nextText.setPosition(window.getSize().x / 2, window.getSize().y / 2);
+
+        auto vis1 = std::make_shared<QuickVisualizer>(&window, &font, true); // right side
+        auto vis2 = std::make_shared<MergeVisualizer>(&window, &font, false); // left side
+
+        bool move_to_results = false;
+        while (window.isOpen() && !move_to_results) {
+            bool vis1Done = vis1->isDone();
+            bool vis2Done = vis2->isDone();
+
+            sf::Event event;
+            while (window.pollEvent(event)) {
+                if (event.type == sf::Event::Closed)
+                    window.close();
+                if (event.type == sf::Event::MouseButtonPressed && vis1Done && vis2Done)
+                    move_to_results = true;
+            }
+
+            if (!vis1Done)
+                vis1->iterate();
+
+            if (!vis2Done)
+                vis2->iterate();
+
+            window.clear(sf::Color::Black);
+
+            window.draw(titleText);
+            vis1->draw();
+            vis2->draw();
+            if (vis1Done && vis2Done)
+                window.draw(nextText);
+
+            window.display();
+        }
     }
+        try {
+            std::vector<DataPoint> data = loadData();
+            testSortPerformance(data);
+        } catch (const std::exception& e) {
+            std::cerr << "Error: " << e.what() << std::endl;
+        }
 
     // Comparison window
     sf::RenderWindow resultWindow(sf::VideoMode(1200, 800), "Sorting Comparisons");
@@ -319,5 +375,7 @@ int main() {
         resultWindow.display();
     }
 
-    return 0;
+        return 0;
+    }
+
 }
