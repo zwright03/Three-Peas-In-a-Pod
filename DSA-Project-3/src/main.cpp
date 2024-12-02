@@ -148,13 +148,122 @@ int main() {
         window.display();
     }
 
+    /*
     try {
         std::vector<DataPoint> data = loadData();
         testSortPerformance(data);
     } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << std::endl;
     }
+     */
 
-    // enter SFML here
+    // Comparison window
+    sf::RenderWindow resultWindow(sf::VideoMode(1200, 800), "Sorting Comparisons");
+
+    sf::Text text1("Original unsorted", font, 30);
+    sf::Text text2("Already sorted", font, 30);
+    sf::Text text3("Reverse sorted", font, 30);
+
+    float windowWidth = resultWindow.getSize().x;
+    float windowHeight = resultWindow.getSize().y;
+    float yPosition = windowHeight - 100;
+
+    float spacing = windowWidth / 4;
+    text1.setPosition(spacing - text1.getLocalBounds().width / 2 - 75, yPosition);
+    text2.setPosition(2 * spacing - text2.getLocalBounds().width / 2, yPosition);
+    text3.setPosition(3 * spacing - text3.getLocalBounds().width / 2 + 75, yPosition);
+
+    text1.setFillColor(sf::Color::White);
+    text2.setFillColor(sf::Color::White);
+    text3.setFillColor(sf::Color::White);
+
+    sf::Text label1("Merge   vs.   Quick", font, 25);
+    sf::Text label2("Merge   vs.   Quick", font, 25);
+    sf::Text label3("Merge   vs.   Quick", font, 25);
+
+    float labelOffset = 60;
+
+    label1.setPosition(spacing - label1.getLocalBounds().width / 2 - 75, yPosition - labelOffset);
+    label2.setPosition(2 * spacing - label2.getLocalBounds().width / 2, yPosition - labelOffset);
+    label3.setPosition(3 * spacing - label3.getLocalBounds().width / 2 + 75, yPosition - labelOffset);
+
+    label1.setFillColor(sf::Color::White);
+    label2.setFillColor(sf::Color::White);
+    label3.setFillColor(sf::Color::White);
+
+    sf::Text time1("Time", font, 20);
+    sf::Text memory1("Memory", font, 20);
+    sf::Text time2("Time", font, 20);
+    sf::Text memory2("Memory", font, 20);
+    sf::Text time3("Time", font, 20);
+    sf::Text memory3("Memory", font, 20);
+    sf::Text time4("Time", font, 20);
+    sf::Text memory4("Memory", font, 20);
+    sf::Text time5("Time", font, 20);
+    sf::Text memory5("Memory", font, 20);
+    sf::Text time6("Time", font, 20);
+    sf::Text memory6("Memory", font, 20);
+
+    float timeMemoryOffset = 60;
+    float columnOffset = 50;
+
+    time1.setPosition(spacing - label1.getLocalBounds().width / 2 - 75 - columnOffset - 7, yPosition - labelOffset - timeMemoryOffset);
+    memory1.setPosition(spacing - label1.getLocalBounds().width / 2 - 75 - columnOffset + 53, yPosition - labelOffset - timeMemoryOffset);
+    time2.setPosition(spacing - label1.getLocalBounds().width / 2 - 75 - columnOffset + 173, yPosition - labelOffset - timeMemoryOffset);
+    memory2.setPosition(spacing - label1.getLocalBounds().width / 2 - 75 - columnOffset + 233, yPosition - labelOffset - timeMemoryOffset);
+    time3.setPosition(2*spacing - label1.getLocalBounds().width / 2 - columnOffset - 7, yPosition - labelOffset - timeMemoryOffset);
+    memory3.setPosition(2*spacing - label1.getLocalBounds().width / 2 - columnOffset + 53, yPosition - labelOffset - timeMemoryOffset);
+    time4.setPosition(2*spacing - label1.getLocalBounds().width / 2 - columnOffset + 173, yPosition - labelOffset - timeMemoryOffset);
+    memory4.setPosition(2*spacing - label1.getLocalBounds().width / 2 - columnOffset + 233, yPosition - labelOffset - timeMemoryOffset);
+    time5.setPosition(3*spacing - label1.getLocalBounds().width / 2 + 75 - columnOffset - 7, yPosition - labelOffset - timeMemoryOffset);
+    memory5.setPosition(3*spacing - label1.getLocalBounds().width / 2 + 75 - columnOffset + 53, yPosition - labelOffset - timeMemoryOffset);
+    time6.setPosition(3*spacing - label1.getLocalBounds().width / 2 + 75 - columnOffset + 173, yPosition - labelOffset - timeMemoryOffset);
+    memory6.setPosition(3*spacing - label1.getLocalBounds().width / 2 + 75 - columnOffset + 233, yPosition - labelOffset - timeMemoryOffset);
+
+    time1.setFillColor(sf::Color::White);
+    memory1.setFillColor(sf::Color::White);
+    time2.setFillColor(sf::Color::White);
+    memory2.setFillColor(sf::Color::White);
+    time3.setFillColor(sf::Color::White);
+    memory3.setFillColor(sf::Color::White);
+    time4.setFillColor(sf::Color::White);
+    memory4.setFillColor(sf::Color::White);
+    time5.setFillColor(sf::Color::White);
+    memory5.setFillColor(sf::Color::White);
+    time6.setFillColor(sf::Color::White);
+    memory6.setFillColor(sf::Color::White);
+
+    while (resultWindow.isOpen()) {
+        sf::Event event;
+        while (resultWindow.pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
+                resultWindow.close();
+        }
+
+        resultWindow.clear(sf::Color::Black);
+
+        resultWindow.draw(text1);
+        resultWindow.draw(text2);
+        resultWindow.draw(text3);
+        resultWindow.draw(label1);
+        resultWindow.draw(label2);
+        resultWindow.draw(label3);
+        resultWindow.draw(time1);
+        resultWindow.draw(memory1);
+        resultWindow.draw(time2);
+        resultWindow.draw(memory2);
+        resultWindow.draw(time3);
+        resultWindow.draw(memory3);
+        resultWindow.draw(time4);
+        resultWindow.draw(memory4);
+        resultWindow.draw(time5);
+        resultWindow.draw(memory5);
+        resultWindow.draw(time6);
+        resultWindow.draw(memory6);
+        // ADD BAR GRAPHS
+
+        resultWindow.display();
+    }
+
     return 0;
 }

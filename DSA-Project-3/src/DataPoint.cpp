@@ -164,4 +164,3 @@ void quickSort(std::vector<DataPoint>& data, int low, int high)
 		quickSort(data, partition_idx + 1, high);
 	}
 }
-// go back to this
