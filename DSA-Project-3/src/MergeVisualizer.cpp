@@ -68,6 +68,9 @@ void MergeVisualizer::iterate() {
 
     // couldnt find where to check if the sorting was done, so i determined
     // its usually fully sorted by the time current size reaches this number:
-    if (current_size >= 128) 
+    if (current_size >= 128) {
         done = true;
+        for (auto& shape : shapes) // at the end some were being left red, so i added this
+            shape.setFillColor(sf::Color::White);
+    }
 }
