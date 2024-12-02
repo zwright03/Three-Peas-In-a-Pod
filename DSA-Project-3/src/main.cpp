@@ -43,19 +43,19 @@ void testSortPerformance(std::vector<DataPoint>& original_data) {
     Timer timer;
     timer.start();
     mergeSort(data, 0, data.size() - 1);
-    int time_merge_original = timer.stop();
+    time_merge_original = timer.stop();
     std::cout << "\nOriginal sorted dataset testing:" << std::endl;
     std::cout << "Merge Sort: Time = " << time_merge_original / 1e6 << " seconds, " << "Memory = " << peak_memory_usage << " bytes\n";
-    size_t memory_merge_original = peak_memory_usage;
+    memory_merge_original = peak_memory_usage;
 
     data = original_data;
     current_memory_usage = 0;
     peak_memory_usage = 0;
     timer.start();
     quickSort(data, 0, data.size() - 1);
-    int time_quick_original = timer.stop();
+    time_quick_original = timer.stop();
     std::cout << "Quick Sort: Time = " << time_quick_original / 1e6 << " seconds, " << "Memory = " << peak_memory_usage << " bytes\n";
-    size_t memory_quick_original = peak_memory_usage;
+    memory_quick_original = peak_memory_usage;
 
     data = original_data;
     std::sort(data.begin(), data.end(), [](const DataPoint& a, const DataPoint& b) {
@@ -65,10 +65,10 @@ void testSortPerformance(std::vector<DataPoint>& original_data) {
     peak_memory_usage = 0;
     timer.start();
     mergeSort(data, 0, data.size() - 1);
-    int time_merge_sorted = timer.stop();
+    time_merge_sorted = timer.stop();
     std::cout << "\nAlready sorted dataset testing:" << std::endl;
     std::cout << "Merge Sort: Time = " << time_merge_sorted / 1e6 << " seconds, " << "Memory = " << peak_memory_usage << " bytes\n";
-    size_t memory_merge_sorted = peak_memory_usage;
+    memory_merge_sorted = peak_memory_usage;
 
     data = original_data;
     std::sort(data.begin(), data.end(), [](const DataPoint& a, const DataPoint& b) {
@@ -78,9 +78,9 @@ void testSortPerformance(std::vector<DataPoint>& original_data) {
     peak_memory_usage = 0;
     timer.start();
     quickSort(data, 0, data.size() - 1);
-    int time_quick_sorted = timer.stop();
+    time_quick_sorted = timer.stop();
     std::cout << "Quick Sort: Time = " << time_quick_sorted / 1e6 << " seconds, " << "Memory = " << peak_memory_usage << " bytes\n";
-    size_t memory_quick_sorted = peak_memory_usage;
+    memory_quick_sorted = peak_memory_usage;
 
     data = original_data;
     std::sort(data.begin(), data.end(), [](const DataPoint& a, const DataPoint& b) {
@@ -90,10 +90,10 @@ void testSortPerformance(std::vector<DataPoint>& original_data) {
     peak_memory_usage = 0;
     timer.start();
     mergeSort(data, 0, data.size() - 1);
-    int time_merge_reverse = timer.stop();
+    time_merge_reverse = timer.stop();
     std::cout << "\nReverse sorted dataset testing:" << std::endl;
     std::cout << "Merge Sort: Time = " << time_merge_reverse / 1e6 << " seconds, " << "Memory = " << peak_memory_usage << " bytes\n";
-    size_t memory_merge_reverse = peak_memory_usage;
+    memory_merge_reverse = peak_memory_usage;
 
     data = original_data;
     std::sort(data.begin(), data.end(), [](const DataPoint& a, const DataPoint& b) {
@@ -103,9 +103,9 @@ void testSortPerformance(std::vector<DataPoint>& original_data) {
     peak_memory_usage = 0;
     timer.start();
     quickSort(data, 0, data.size() - 1);
-    int time_quick_reverse = timer.stop();
+    time_quick_reverse = timer.stop();
     std::cout << "Quick Sort: Time = " << time_quick_reverse / 1e6 << " seconds, " << "Memory = " << peak_memory_usage << " bytes\n";
-    size_t memory_quick_reverse = peak_memory_usage;
+    memory_quick_reverse = peak_memory_usage;
 }
 
 int main() {
@@ -148,14 +148,12 @@ int main() {
         window.display();
     }
 
-    /*
     try {
         std::vector<DataPoint> data = loadData();
         testSortPerformance(data);
     } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << std::endl;
     }
-     */
 
     // Comparison window
     sf::RenderWindow resultWindow(sf::VideoMode(1200, 800), "Sorting Comparisons");
@@ -169,9 +167,9 @@ int main() {
     float yPosition = windowHeight - 100;
 
     float spacing = windowWidth / 4;
-    text1.setPosition(spacing - text1.getLocalBounds().width / 2 - 75, yPosition);
-    text2.setPosition(2 * spacing - text2.getLocalBounds().width / 2, yPosition);
-    text3.setPosition(3 * spacing - text3.getLocalBounds().width / 2 + 75, yPosition);
+    text1.setPosition(spacing - text1.getLocalBounds().width / 2 - 90, yPosition - 615);
+    text2.setPosition(2 * spacing - text2.getLocalBounds().width / 2 - 15, yPosition - 615);
+    text3.setPosition(3 * spacing - text3.getLocalBounds().width / 2 + 60, yPosition - 615);
 
     text1.setFillColor(sf::Color::White);
     text2.setFillColor(sf::Color::White);
@@ -233,6 +231,59 @@ int main() {
     time6.setFillColor(sf::Color::White);
     memory6.setFillColor(sf::Color::White);
 
+    std::array<double, 6> timeValues = {time_merge_original, time_merge_reverse, time_merge_sorted, time_quick_original, time_quick_reverse, time_quick_sorted};
+    std::array<size_t, 6> memoryValues = {memory_merge_original, memory_merge_reverse, memory_merge_sorted, memory_quick_original, memory_quick_reverse, memory_quick_sorted};
+    double maxTime = *std::max_element(timeValues.begin(), timeValues.end());
+    double maxMemory = *std::max_element(memoryValues.begin(), memoryValues.end());
+
+    double timeScaler = 350 / maxTime;
+    double memoryScaler = 350 / maxMemory;
+
+    std::vector<double> barHeights = {
+            time_merge_original*timeScaler,
+            memory_merge_original*memoryScaler,
+            time_quick_original*timeScaler,
+            memory_quick_original*memoryScaler,
+            time_merge_sorted*timeScaler,
+            memory_merge_sorted*memoryScaler,
+            time_quick_sorted*timeScaler,
+            memory_quick_sorted*memoryScaler,
+            time_merge_reverse*timeScaler,
+            memory_merge_reverse*memoryScaler,
+            time_quick_reverse*timeScaler,
+            memory_quick_reverse*memoryScaler
+    };
+
+    std::vector<sf::Color> barColors = {
+            sf::Color::Blue, sf::Color::Green,
+            sf::Color::Blue, sf::Color::Green,
+            sf::Color::Blue, sf::Color::Green,
+            sf::Color::Blue, sf::Color::Green,
+            sf::Color::Blue, sf::Color::Green,
+            sf::Color::Blue, sf::Color::Green
+    };
+    std::vector<float> barXPositions = {
+            spacing - label1.getLocalBounds().width / 2 - 66 - columnOffset - 7,
+            spacing - label1.getLocalBounds().width / 2 - 66 - columnOffset + 62,
+            spacing - label1.getLocalBounds().width / 2 - 66 - columnOffset + 173,
+            spacing - label1.getLocalBounds().width / 2 - 66 - columnOffset + 242,
+            2 * spacing - label1.getLocalBounds().width / 2 + 9 - columnOffset - 7,
+            2 * spacing - label1.getLocalBounds().width / 2 + 9 - columnOffset + 62,
+            2 * spacing - label1.getLocalBounds().width / 2 + 9 - columnOffset + 173,
+            2 * spacing - label1.getLocalBounds().width / 2 + 9 - columnOffset + 242,
+            3 * spacing - label1.getLocalBounds().width / 2 + 84 - columnOffset - 7,
+            3 * spacing - label1.getLocalBounds().width / 2 + 84 - columnOffset + 62,
+            3 * spacing - label1.getLocalBounds().width / 2 + 84 - columnOffset + 173,
+            3 * spacing - label1.getLocalBounds().width / 2 + 84 - columnOffset + 242
+    };
+    std::vector<sf::RectangleShape> bars;
+    for (size_t i = 0; i < barHeights.size(); ++i) {
+        sf::RectangleShape bar(sf::Vector2f(30, -barHeights[i]));
+        bar.setPosition(barXPositions[i], yPosition - labelOffset - timeMemoryOffset - 20);
+        bar.setFillColor(barColors[i % barColors.size()]);
+        bars.push_back(bar);
+    }
+
     while (resultWindow.isOpen()) {
         sf::Event event;
         while (resultWindow.pollEvent(event)) {
@@ -260,7 +311,10 @@ int main() {
         resultWindow.draw(memory5);
         resultWindow.draw(time6);
         resultWindow.draw(memory6);
-        // ADD BAR GRAPHS
+
+        for (auto& bar : bars) {
+            resultWindow.draw(bar);
+        }
 
         resultWindow.display();
     }
