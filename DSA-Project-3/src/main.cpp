@@ -10,10 +10,15 @@
 #include <algorithm>
 #include <cstddef>
 #include <cstdlib>
+#include <mutex>
+#include <thread>
+
+// Mutex for multithreading
+std::mutex mtx;
 
 // Variables used for comparing performance
-static size_t current_memory_usage = 0;
-static size_t peak_memory_usage = 0;
+static thread_local size_t current_memory_usage = 0;
+static thread_local size_t peak_memory_usage = 0;
 static double time_merge_original, time_quick_original, time_merge_sorted, time_quick_sorted, time_merge_reverse, time_quick_reverse;
 static size_t memory_merge_original, memory_quick_original, memory_merge_sorted, memory_quick_sorted, memory_merge_reverse, memory_quick_reverse;
 
@@ -34,81 +39,39 @@ void operator delete(void* ptr) noexcept {
     free(ptr);
 }
 
+// Data is not passed by reference, it needs to be copied for intended behaivor
+static void runSortTest(std::vector<DataPoint> data, const std::string& test_name, void (*sort_fn)(std::vector<DataPoint>&, int, int), double& time_taken, size_t& memory_usage) {
+    current_memory_usage = 0;
+    peak_memory_usage = 0;
+
+    time_taken = timeSortFunction(sort_fn, data);
+
+    memory_usage = peak_memory_usage;
+
+    std::lock_guard<std::mutex> lock(mtx);
+    std::cout << test_name << " Performance: Time = " << time_taken / 1e6 << " seconds, Memory = " << memory_usage << " bytes\n";
+}
+
 // Tests all the different scenarios, calculating time and memory usage
-void testSortPerformance(std::vector<DataPoint>& original_data) {
-    std::vector<DataPoint> data;
+static void testSortPerformance(std::vector<DataPoint>& original_data) {
+    std::vector<DataPoint> sorted_data = original_data;
+    std::sort(sorted_data.begin(), sorted_data.end(), [](const DataPoint& a, const DataPoint& b) {
+        return a.total_amount < b.total_amount;});
 
-    std::cout << "\nInitial Memory Usage: " << current_memory_usage << " bytes\n";
+    std::vector<DataPoint> reverse_sorted_data = sorted_data;
+    std::reverse(reverse_sorted_data.begin(), reverse_sorted_data.end());
 
-    data = original_data;
-    current_memory_usage = 0;
-    peak_memory_usage = 0;
-    Timer timer;
-    timer.start();
-    mergeSort(data, 0, data.size() - 1);
-    time_merge_original = timer.stop();
-    std::cout << "\nOriginal sorted dataset testing:" << std::endl;
-    std::cout << "Merge Sort: Time = " << time_merge_original / 1e6 << " seconds, " << "Memory = " << peak_memory_usage << " bytes\n";
-    memory_merge_original = peak_memory_usage;
+    std::array<std::thread, 6> threads;
+    threads[0] = std::thread(runSortTest, original_data, "Merge Sort (Normal)", mergeSort, std::ref(time_merge_original), std::ref(memory_merge_original));
+    threads[1] = std::thread(runSortTest, original_data, "Quick Sort (Normal)", quickSort, std::ref(time_quick_original), std::ref(memory_quick_original));
+    threads[2] = std::thread(runSortTest, sorted_data, "Merge Sort (Already Sorted)", mergeSort, std::ref(time_merge_sorted), std::ref(memory_merge_sorted));
+    threads[3] = std::thread(runSortTest, sorted_data, "Quick Sort (Already Sorted)", quickSort, std::ref(time_quick_sorted), std::ref(memory_quick_sorted));
+    threads[4] = std::thread(runSortTest, reverse_sorted_data, "Merge Sort (Reverse Sorted)", mergeSort, std::ref(time_merge_reverse), std::ref(memory_merge_reverse));
+    threads[5] = std::thread(runSortTest, reverse_sorted_data, "Quick Sort (Reverse Sorted)", quickSort, std::ref(time_quick_reverse), std::ref(memory_quick_reverse));
 
-    data = original_data;
-    current_memory_usage = 0;
-    peak_memory_usage = 0;
-    timer.start();
-    quickSort(data, 0, data.size() - 1);
-    time_quick_original = timer.stop();
-    std::cout << "Quick Sort: Time = " << time_quick_original / 1e6 << " seconds, " << "Memory = " << peak_memory_usage << " bytes\n";
-    memory_quick_original = peak_memory_usage;
+    for (auto& thread : threads) // Wait for all threads to finish before continuing
+        thread.join();
 
-    data = original_data;
-    std::sort(data.begin(), data.end(), [](const DataPoint& a, const DataPoint& b) {
-        return a.total_amount < b.total_amount;
-    });
-    current_memory_usage = 0;
-    peak_memory_usage = 0;
-    timer.start();
-    mergeSort(data, 0, data.size() - 1);
-    time_merge_sorted = timer.stop();
-    std::cout << "\nAlready sorted dataset testing:" << std::endl;
-    std::cout << "Merge Sort: Time = " << time_merge_sorted / 1e6 << " seconds, " << "Memory = " << peak_memory_usage << " bytes\n";
-    memory_merge_sorted = peak_memory_usage;
-
-    data = original_data;
-    std::sort(data.begin(), data.end(), [](const DataPoint& a, const DataPoint& b) {
-        return a.total_amount < b.total_amount;
-    });
-    current_memory_usage = 0;
-    peak_memory_usage = 0;
-    timer.start();
-    quickSort(data, 0, data.size() - 1);
-    time_quick_sorted = timer.stop();
-    std::cout << "Quick Sort: Time = " << time_quick_sorted / 1e6 << " seconds, " << "Memory = " << peak_memory_usage << " bytes\n";
-    memory_quick_sorted = peak_memory_usage;
-
-    data = original_data;
-    std::sort(data.begin(), data.end(), [](const DataPoint& a, const DataPoint& b) {
-        return a.total_amount > b.total_amount;
-    });
-    current_memory_usage = 0;
-    peak_memory_usage = 0;
-    timer.start();
-    mergeSort(data, 0, data.size() - 1);
-    time_merge_reverse = timer.stop();
-    std::cout << "\nReverse sorted dataset testing:" << std::endl;
-    std::cout << "Merge Sort: Time = " << time_merge_reverse / 1e6 << " seconds, " << "Memory = " << peak_memory_usage << " bytes\n";
-    memory_merge_reverse = peak_memory_usage;
-
-    data = original_data;
-    std::sort(data.begin(), data.end(), [](const DataPoint& a, const DataPoint& b) {
-        return a.total_amount > b.total_amount;
-    });
-    current_memory_usage = 0;
-    peak_memory_usage = 0;
-    timer.start();
-    quickSort(data, 0, data.size() - 1);
-    time_quick_reverse = timer.stop();
-    std::cout << "Quick Sort: Time = " << time_quick_reverse / 1e6 << " seconds, " << "Memory = " << peak_memory_usage << " bytes\n";
-    memory_quick_reverse = peak_memory_usage;
 }
 
 // Main function that calls the performance method and all of the SFML windows
