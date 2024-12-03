@@ -12,7 +12,7 @@ private:
 
 protected:
 	std::array<SortShape, 50> shapes; // Array of shapes to draw and sort, using n = 50
-	int i, j, comparisons, swaps; // i and j for looping, comparisons and swaps for comparing the algorithms
+	int comparisons, swaps; // comparisons and swaps for comparing the algorithms
 	bool done; // To check if it's done sorting
 
 public:

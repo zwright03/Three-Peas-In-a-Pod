@@ -4,7 +4,7 @@
 #include <string>
 
 // Main visualizer class for the merge vs. quick sort visualization
-Visualizer::Visualizer(sf::RenderWindow* window, sf::Font* font, bool rightSide, bool worst_case) : i(0), j(0), comparisons(0), swaps(0), xOffset(50),
+Visualizer::Visualizer(sf::RenderWindow* window, sf::Font* font, bool rightSide, bool worst_case) : comparisons(0), swaps(0), xOffset(50),
 yOffset(50), done(false), window(window) {
 	auto windowSize = window->getSize();
 	
