@@ -8,8 +8,8 @@ Features include:
       - Reverse sorted
 
 Software requirements include:
+- Git (Required for cmake to fetch SFML)
 - C++17 or higher
-- SFML 2.5 or higher
 
 Hardware requirements include:
 - System with at least 8GB of ram
