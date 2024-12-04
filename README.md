@@ -8,7 +8,8 @@ Features include:
       - Reverse sorted
 
 Software requirements include:
-- Git (Required for cmake to fetch SFML)
+- CMake 3.8+
+- Git (Required for CMake to fetch SFML)
 - C++17 or higher
 
 Hardware requirements include:
@@ -24,3 +25,9 @@ The workflow in the following order is:
 - Merge and quick sort visualization
 - Performance testing on the dataset in different scenarios
 - Results screen with bar graphs comparing time and memory usage
+
+Build Instructions:
+1. Ensure 'git' is installed and accessible from the command line.
+2. Ensure CMake version 3.8+ is installed.
+3. C++ Compiler: Ensure you have a compiler that supports C++17 or later.
+4. Run CMake to configure the project. CMake will automatically fetch the SFML dependency.

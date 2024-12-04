@@ -5,13 +5,15 @@
 #include "SortShape.h"
 #include "SortVisualizer.h"
 #include "timer.h"
-#include <iostream>
-#include <memory>
 #include <algorithm>
 #include <cstddef>
 #include <cstdlib>
+#include <iostream>
+#include <iomanip>
+#include <memory>
 #include <mutex>
 #include <thread>
+#include <sstream>
 
 // Mutex for multithreading
 std::mutex mtx;
@@ -72,6 +74,13 @@ static void testSortPerformance(std::vector<DataPoint>& original_data) {
     for (auto& thread : threads) // Wait for all threads to finish before continuing
         thread.join();
 
+}
+
+// Rounds a provided float to n decimal places, returns a string
+static std::string roundFloat(const double& num, const int& n) {
+    std::ostringstream ss;
+    ss << std::fixed << std::setprecision(n) << num;
+    return ss.str();
 }
 
 // Main function that calls the performance method and all of the SFML windows
@@ -255,34 +264,39 @@ Click anywhere to continue.)";
         label2.setFillColor(sf::Color::White);
         label3.setFillColor(sf::Color::White);
 
-        sf::Text time1("Time", font, 20);
-        sf::Text memory1("Memory", font, 20);
-        sf::Text time2("Time", font, 20);
-        sf::Text memory2("Memory", font, 20);
-        sf::Text time3("Time", font, 20);
-        sf::Text memory3("Memory", font, 20);
-        sf::Text time4("Time", font, 20);
-        sf::Text memory4("Memory", font, 20);
-        sf::Text time5("Time", font, 20);
-        sf::Text memory5("Memory", font, 20);
-        sf::Text time6("Time", font, 20);
-        sf::Text memory6("Memory", font, 20);
+        sf::Text time1(roundFloat(time_merge_original / 1e6, 2) + 'S' + "\nTime", font, 20);
+        sf::Text memory1(roundFloat((double)memory_merge_original / 1e6, 1) + "MB" + "\nMemory", font, 20);
+
+        sf::Text time2(roundFloat(time_quick_original / 1e6, 2) + 'S' + "\nTime", font, 20);
+        sf::Text memory2(roundFloat((double)memory_quick_original / 1e6, 1) + "MB" + "\nMemory", font, 20);
+
+        sf::Text time3(roundFloat(time_merge_sorted / 1e6, 2) + 'S' + "\nTime", font, 20);
+        sf::Text memory3(roundFloat((double)memory_merge_sorted / 1e6, 1) + "MB" + "\nMemory", font, 20);
+
+        sf::Text time4(roundFloat(time_quick_sorted / 1e6, 2) + 'S' + "\nTime", font, 20);
+        sf::Text memory4(roundFloat((double)memory_quick_sorted / 1e6, 1) + "MB" + "\nMemory", font, 20);
+
+        sf::Text time5(roundFloat(time_merge_reverse / 1e6, 2) + 'S' + "\nTime", font, 20);
+        sf::Text memory5(roundFloat((double)memory_merge_reverse / 1e6, 1) + "MB" + "\nMemory", font, 20);
+
+        sf::Text time6(roundFloat(time_quick_reverse / 1e6, 2) + 'S' + "\nTime", font, 20);
+        sf::Text memory6(roundFloat((double)memory_quick_reverse / 1e6, 1) + "MB" + "\nMemory", font, 20);
 
         float timeMemoryOffset = 60;
         float columnOffset = 50;
 
-        time1.setPosition(spacing - label1.getLocalBounds().width / 2 - 75 - columnOffset - 7, yPosition - labelOffset - timeMemoryOffset);
-        memory1.setPosition(spacing - label1.getLocalBounds().width / 2 - 75 - columnOffset + 53, yPosition - labelOffset - timeMemoryOffset);
-        time2.setPosition(spacing - label1.getLocalBounds().width / 2 - 75 - columnOffset + 173, yPosition - labelOffset - timeMemoryOffset);
-        memory2.setPosition(spacing - label1.getLocalBounds().width / 2 - 75 - columnOffset + 233, yPosition - labelOffset - timeMemoryOffset);
-        time3.setPosition(2 * spacing - label1.getLocalBounds().width / 2 - columnOffset - 7, yPosition - labelOffset - timeMemoryOffset);
-        memory3.setPosition(2 * spacing - label1.getLocalBounds().width / 2 - columnOffset + 53, yPosition - labelOffset - timeMemoryOffset);
-        time4.setPosition(2 * spacing - label1.getLocalBounds().width / 2 - columnOffset + 173, yPosition - labelOffset - timeMemoryOffset);
-        memory4.setPosition(2 * spacing - label1.getLocalBounds().width / 2 - columnOffset + 233, yPosition - labelOffset - timeMemoryOffset);
-        time5.setPosition(3 * spacing - label1.getLocalBounds().width / 2 + 75 - columnOffset - 7, yPosition - labelOffset - timeMemoryOffset);
-        memory5.setPosition(3 * spacing - label1.getLocalBounds().width / 2 + 75 - columnOffset + 53, yPosition - labelOffset - timeMemoryOffset);
-        time6.setPosition(3 * spacing - label1.getLocalBounds().width / 2 + 75 - columnOffset + 173, yPosition - labelOffset - timeMemoryOffset);
-        memory6.setPosition(3 * spacing - label1.getLocalBounds().width / 2 + 75 - columnOffset + 233, yPosition - labelOffset - timeMemoryOffset);
+        time1.setPosition(spacing - label1.getLocalBounds().width / 2 - 75 - columnOffset - 15, yPosition - labelOffset - timeMemoryOffset);
+        memory1.setPosition(spacing - label1.getLocalBounds().width / 2 - 75 - columnOffset + 60, yPosition - labelOffset - timeMemoryOffset);
+        time2.setPosition(spacing - label1.getLocalBounds().width / 2 - 75 - columnOffset + 165, yPosition - labelOffset - timeMemoryOffset);
+        memory2.setPosition(spacing - label1.getLocalBounds().width / 2 - 75 - columnOffset + 240, yPosition - labelOffset - timeMemoryOffset);
+        time3.setPosition(2 * spacing - label1.getLocalBounds().width / 2 - columnOffset - 15, yPosition - labelOffset - timeMemoryOffset);
+        memory3.setPosition(2 * spacing - label1.getLocalBounds().width / 2 - columnOffset + 60, yPosition - labelOffset - timeMemoryOffset);
+        time4.setPosition(2 * spacing - label1.getLocalBounds().width / 2 - columnOffset + 165, yPosition - labelOffset - timeMemoryOffset);
+        memory4.setPosition(2 * spacing - label1.getLocalBounds().width / 2 - columnOffset + 240, yPosition - labelOffset - timeMemoryOffset);
+        time5.setPosition(3 * spacing - label1.getLocalBounds().width / 2 + 75 - columnOffset - 15, yPosition - labelOffset - timeMemoryOffset);
+        memory5.setPosition(3 * spacing - label1.getLocalBounds().width / 2 + 75 - columnOffset + 60, yPosition - labelOffset - timeMemoryOffset);
+        time6.setPosition(3 * spacing - label1.getLocalBounds().width / 2 + 75 - columnOffset + 165, yPosition - labelOffset - timeMemoryOffset);
+        memory6.setPosition(3 * spacing - label1.getLocalBounds().width / 2 + 75 - columnOffset + 240, yPosition - labelOffset - timeMemoryOffset);
 
         time1.setFillColor(sf::Color::White);
         memory1.setFillColor(sf::Color::White);
